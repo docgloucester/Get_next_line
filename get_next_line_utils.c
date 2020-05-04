@@ -10,4 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
 
+size_t	ft_strlen(const char *str);
+char	*ft_strdup(const char *src);
+char	*ft_strjoin(const char *s1, const char *s2);
+int		ft_strchr(const char *s, int c);
+char	*ft_substr(const char *str, unsigned int start, size_t len);
