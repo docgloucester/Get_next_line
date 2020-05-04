@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char		*ft_rest(char *str)
+char		*rest_of_buffer(char *str)
 {
 	int				i;
 	int				str_len;
@@ -24,19 +24,19 @@ char		*ft_rest(char *str)
 	{
 		while (str[i] != '\0' && str[i] != '\n')
 			i++;
-	}
-	if (str[i] == '\n' && str != NULL)
-	{
-		tmp = str;
-		str = ft_substr(str, i + 1, str_len - i - 1);
-		free(tmp);
+		if (str[i] == '\n')
+		{
+			tmp = str;
+			str = ft_substr(str, i + 1, str_len - i - 1);
+			free(tmp);
+		}
 	}
 	return (str);
 }
 
-int			ft_line(char *str, char **line, int nbread)
+void		inject_line(char *str, char **line)
 {
-	int				i;
+	int	i;
 
 	i = 0;
 	if (str != NULL)
@@ -45,18 +45,11 @@ int			ft_line(char *str, char **line, int nbread)
 			i++;
 		if (str[i] == '\n')
 			*line = ft_substr(str, 0, i);
+		else if (str[i] == 0)
+			*line = ft_strdup(str);
 	}
-	if (nbread == 0 && str == NULL)
-	{
+	else
 		*line = ft_strdup("");
-		return (0);
-	}
-	if (nbread == 0 && str[i] == '\0')
-	{
-		*line = ft_strdup(str);
-		return (0);
-	}
-	return (1);
 }
 
 char		*get_line_buffered(char *str, int fd, int *nbread)
@@ -92,10 +85,10 @@ int			get_next_line(int fd, char **line)
 	str = get_line_buffered(str, fd, &nbread);
 	if (nbread < 0)
 		return (-1);
-	value = ft_line(str, line, nbread);
-	if (value == 1)
-		str = ft_rest(str);
-	if (value == 0)
+	inject_line(str, line);
+	if (nbread)
+		str = rest_of_buffer(str);
+	else
 	{
 		free(str);
 		str = NULL;
