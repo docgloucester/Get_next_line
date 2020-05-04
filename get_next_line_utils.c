@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *str)
 	const char	*charptr;
 	size_t		i;
 
+	if (!str)
+		return (0);
 	charptr = str;
 	i = 0;
 	while (*charptr++)
@@ -25,8 +27,40 @@ size_t	ft_strlen(const char *str)
 }
 
 char	*ft_strdup(const char *src)
+{
+	char	*dupli;
+	int		i;
+
+	i = 0;
+	if (!(dupli = malloc(ft_strlen(src) + 1)))
+		return (dupli);
+	while (src[i])
+	{
+		dupli[i] = src[i];
+		i++;
+	}
+	dupli[i] = 0;
+	return (dupli);
+}
 
 char	*ft_strjoin(const char *s1, const char *s2)
+{
+	char	*s3;
+	int		i;
+	int		j;
+
+	if ((!s1 && !s2) ||
+		(!(s3 = (char*)malloc(ft_strlen(s2) + ft_strlen(s1) + 1))))
+		return (NULL);
+	i = -1;
+	j = -1;
+	while (ft_strlen(s1) && s1[++i])
+		s3[i] = s1[i];
+	while (ft_strlen(s2) && s2[++j])
+		s3[++i] = s2[j];
+	s3[++i] = 0;
+	return (s3);
+}
 
 int		ft_strchr(const char *str, int c)
 {
