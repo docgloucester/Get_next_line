@@ -87,15 +87,15 @@ int			get_next_line(int fd, char **line)
 {
 	int				nb_read;
 	static char		*str;
-	int				val;
+	int				more_in_buffer;
 
 	if (fd < 0 || line == NULL || BUFFER_SIZE == 0)
 		return (-1);
 	str = get_line_buffered(str, fd, &nb_read);
 	if (nb_read < 0)
 		return (-1);
-	val = inject_line(str, line);
-	if (val)
+	more_in_buffer = inject_line(str, line);
+	if (more_in_buffer)
 		str = rest_of_buffer(str);
 	else
 	{
