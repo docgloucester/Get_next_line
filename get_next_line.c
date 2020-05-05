@@ -34,9 +34,9 @@ char		*get_line_buffered(char *str, int fd, int *nb_read)
 	return (str);
 }
 
-void		inject_line(char *str, char **line)
+int			inject_line(char *str, char **line)
 {
-	int	i;
+	int				i;
 
 	i = 0;
 	if (str != NULL)
@@ -44,12 +44,21 @@ void		inject_line(char *str, char **line)
 		while (str[i] != '\0' && str[i] != '\n')
 			i++;
 		if (str[i] == '\n')
+		{
 			*line = ft_substr(str, 0, i);
-		else if (str[i] == 0)
+			return (1);
+		}
+		else
+		{
 			*line = ft_strdup(str);
+			return (0);
+		}
 	}
 	else
+	{
 		*line = ft_strdup("");
+		return (0);
+	}
 }
 
 char		*rest_of_buffer(char *str)
@@ -78,14 +87,15 @@ int			get_next_line(int fd, char **line)
 {
 	int				nb_read;
 	static char		*str;
+	int				val;
 
 	if (fd < 0 || line == NULL || BUFFER_SIZE == 0)
 		return (-1);
 	str = get_line_buffered(str, fd, &nb_read);
 	if (nb_read < 0)
 		return (-1);
-	inject_line(str, line);
-	if (nb_read)
+	val = inject_line(str, line);
+	if (val)
 		str = rest_of_buffer(str);
 	else
 	{

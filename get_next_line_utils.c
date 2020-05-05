@@ -43,23 +43,27 @@ char	*ft_strdup(const char *src)
 	return (dupli);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*s3;
-	int		i;
-	int		j;
+	unsigned int	new_str_len;
+	unsigned int	i;
+	unsigned int	j;
+	char			*new;
 
-	if ((!s1 && !s2) ||
-		(!(s3 = (char*)malloc(ft_strlen(s2) + ft_strlen(s1) + 1))))
+	i = 0;
+	j = 0;
+	new_str_len = ft_strlen(s1) + ft_strlen(s2);
+	if (s1 == NULL || s2 == NULL)
 		return (NULL);
-	i = -1;
-	j = -1;
-	while (ft_strlen(s1) && s1[++i])
-		s3[i] = s1[i];
-	while (ft_strlen(s2) && s2[++j])
-		s3[++i] = s2[j];
-	s3[++i] = 0;
-	return (s3);
+	if (!(new = (char *)malloc(sizeof(char) * (new_str_len + 1))))
+		return (NULL);
+	while (s1[i] != '\0')
+		new[i++] = (char)s1[j++];
+	j = 0;
+	while (s2[j] != '\0')
+		new[i++] = (char)s2[j++];
+	new[i] = '\0';
+	return (new);
 }
 
 int		ft_strchr(const char *str, int c)
