@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -86,21 +86,21 @@ char		*rest_of_buffer(char *str)
 int			get_next_line(int fd, char **line)
 {
 	int				nb_read;
-	static char		*str;
+	static char		*str[255];
 	int				more_in_buffer;
 
-	if (fd < 0 || line == NULL || BUFFER_SIZE == 0)
+	if (read(fd, str[fd], 0) != 0 || line == NULL || BUFFER_SIZE == 0)
 		return (-1);
-	str = get_line_buffered(str, fd, &nb_read);
+	str[fd] = get_line_buffered(str[fd], fd, &nb_read);
 	if (nb_read < 0)
 		return (-1);
-	more_in_buffer = inject_line(str, line);
+	more_in_buffer = inject_line(str[fd], line);
 	if (more_in_buffer)
-		str = rest_of_buffer(str);
+		str[fd] = rest_of_buffer(str[fd]);
 	else
 	{
-		free(str);
-		str = NULL;
+		free(str[fd]);
+		str[fd] = NULL;
 		return (0);
 	}
 	return (1);
