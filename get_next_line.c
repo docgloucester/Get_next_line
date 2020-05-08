@@ -86,10 +86,10 @@ char		*rest_of_buffer(char *str)
 int			get_next_line(int fd, char **line)
 {
 	int				nb_read;
-	static char		*str[255];
+	static char		*str[2560];
 	int				more_in_buffer;
 
-	if (read(fd, str[fd], 0) != 0 || line == NULL || BUFFER_SIZE == 0)
+	if (read(fd, str[fd], 0) || line == NULL || BUFFER_SIZE == 0)
 		return (-1);
 	str[fd] = get_line_buffered(str[fd], fd, &nb_read);
 	if (nb_read < 0)
